@@ -1,0 +1,352 @@
+You are an expert full-stack engineer.
+Generate a **production-ready but compact codebase** for a **Hotel Booking Demo Application**.
+
+IMPORTANT REQUIREMENTS
+
+1. Do NOT generate excessive files.
+2. Keep the architecture modular but compact.
+3. All configuration variables must live in a **single config module**.
+4. Reusable helpers must live in **shared utility modules**.
+5. Avoid deep folder nesting.
+6. Prefer **clear separation of concerns** instead of many tiny files.
+7. The code should be easy to understand for consulting demo purposes.
+8. Use **TypeScript everywhere**.
+
+---
+
+PROJECT PURPOSE
+
+This is a **demo system for a consulting portfolio** that shows how a hotel booking platform works.
+
+It should demonstrate:
+
+• landing page
+• room browsing
+• availability checking
+• booking flow
+• login/signup
+• Stripe payment
+• user dashboard
+• admin dashboard
+
+It should look **real but still simple to maintain**.
+
+---
+
+TECH STACK
+
+Frontend:
+Next.js 14 (App Router)
+
+Hosting:
+Cloudflare Pages
+
+Backend:
+Cloudflare Workers via Next.js API routes
+
+Database:
+Supabase PostgreSQL
+
+Authentication:
+JWT stored in HttpOnly cookies
+
+Payments:
+Stripe Checkout
+
+Email:
+Placeholder function for Zoho SMTP
+
+Language:
+TypeScript
+
+Styling:
+Tailwind CSS
+
+---
+
+HIGH LEVEL FEATURES
+
+Landing Page
+
+* hotel hero section
+* room types preview
+* amenities
+* call to action
+
+Booking Flow
+
+1. choose dates
+2. see room availability
+3. select room type
+4. login/signup
+5. payment with Stripe
+6. booking confirmation
+
+User Dashboard
+
+* view bookings
+* booking status
+* cancel booking
+
+Admin Dashboard
+
+* view all rooms
+* see room numbers
+* change prices
+* upload images
+* mark room unavailable
+* create room type
+
+---
+
+DATABASE DESIGN (SUPABASE)
+
+Tables:
+
+users
+
+* id
+* name
+* email
+* phone
+* password_hash
+* role
+* created_at
+
+room_types
+
+* id
+* name
+* description
+* capacity
+* base_price
+* images
+
+rooms
+
+* id
+* room_type_id
+* room_number
+* status
+
+bookings
+
+* id
+* booking_code
+* user_id
+* room_id
+* check_in
+* check_out
+* nights
+* total_price
+* payment_status
+* stripe_payment_id
+* status
+* created_at
+
+---
+
+IMPORTANT LOGIC
+
+Availability check must prevent double booking.
+
+Condition:
+
+existing.check_in < new_checkout
+AND
+existing.check_out > new_checkin
+
+Use this logic in the booking service.
+
+---
+
+STRIPE PAYMENT FLOW
+
+1. frontend calls create-checkout-session
+2. backend creates Stripe session
+3. redirect to Stripe
+4. Stripe webhook confirms payment
+5. booking status updated
+
+Never trust frontend payment result.
+
+---
+
+PROJECT STRUCTURE
+
+Keep structure **simple and compact**.
+
+Example structure:
+
+/app
+page.tsx
+booking/page.tsx
+dashboard/page.tsx
+admin/page.tsx
+
+/api
+auth.ts
+rooms.ts
+bookings.ts
+stripe.ts
+
+/lib
+config.ts
+db.ts
+auth.ts
+stripe.ts
+booking.ts
+
+/components
+RoomCard.tsx
+DateSelector.tsx
+BookingSummary.tsx
+Navbar.tsx
+
+/types
+index.ts
+
+/styles
+globals.css
+
+---
+
+CONFIGURATION
+
+Create a single config file:
+
+lib/config.ts
+
+It should contain:
+
+* stripe keys
+* supabase keys
+* tax rate
+* stripe fee rate
+* site name
+* booking policies
+
+Example:
+
+export const CONFIG = {
+SITE_NAME: "Hotel Demo",
+GST_RATE: 0.18,
+STRIPE_FEE: 0.029,
+}
+
+---
+
+UTILITY MODULES
+
+Create shared utilities inside /lib.
+
+Examples:
+
+db.ts
+Supabase client
+
+auth.ts
+JWT generation and verification
+
+booking.ts
+availability logic and booking creation
+
+stripe.ts
+Stripe client setup
+
+---
+
+ADMIN VS USER VIEW
+
+Users see:
+
+Premium Room
+Deluxe Room
+
+Admin sees:
+
+Room 101
+Room 102
+Room 103
+
+Room numbers should not be shown to users.
+
+---
+
+PRICING CALCULATION
+
+total price =
+
+(room_price × nights)
+
+* GST
+* Stripe fee
+
+Stripe fee should be shown as **non-refundable**.
+
+---
+
+BOOKING CODE
+
+Generate booking IDs like:
+
+HTL-2026-00021
+
+---
+
+ERROR HANDLING
+
+All API routes must:
+
+* validate inputs
+* return structured JSON responses
+* handle database errors
+
+---
+
+SECURITY
+
+* password hashed with bcrypt
+* JWT stored in httpOnly cookies
+* admin routes protected by role
+
+---
+
+UI GOAL
+
+The UI should be:
+
+• clean
+• modern
+• minimal
+• Tailwind based
+
+This is a **demo system**, so prioritize clarity over complexity.
+
+---
+
+DEVELOPMENT GOAL
+
+The code should be readable for:
+
+* clients reviewing the demo
+* developers extending it
+* consulting presentations
+
+Avoid unnecessary abstraction.
+
+---
+
+OUTPUT FORMAT
+
+1. Show the folder structure first
+2. Then generate code file by file
+3. Keep files reasonably sized
+4. Avoid creating unnecessary files
+5. Use comments explaining important parts
+
+---
+
+FINAL NOTE
+
+This project should demonstrate a **professional booking system architecture** while keeping the codebase **clean and compact**.
